@@ -28,8 +28,10 @@ extern "C"
 
 #define CVOLT_PWM_OUT_PIN 18 // GPIO 18 => PŴM output pin
 
-#define CVOLT_TOP_COUNT  65534
+#define CVOLT_TOP_COUNT  126
 #define CVOLT_CC_INITIAL (CVOLT_TOP_COUNT/2)
+
+#define CVOLT_PWM_CLOCK_DIVIDER 125
 
     /* ************************************************************************* */
     /*                               GLOBAL VARIABLES                            */

@@ -64,8 +64,10 @@ static void prvSetupHardware(void)
 {
     gpio_set_function(CVOLT_PWM_OUT_PIN, GPIO_FUNC_PWM);
 
-    // Find out which PWM slice is connected to GPIO 0 (it's slice 0)
+    // Find out which PWM slice is connected to GPIO
     uint slice_num = GPIO_TO_PWM_SLICE(CVOLT_PWM_OUT_PIN);
+    // Sets the suitable clock divider to avoid a very high frequency
+    pwm_set_clkdiv_int_frac(slice_num, CVOLT_PWM_CLOCK_DIVIDER, 0);
     // Set period to (CVOLT_TOP_COUNT + 1) cycles
     pwm_set_wrap(slice_num, CVOLT_TOP_COUNT);
     // Set channel A output high for CVOLT_CC_INITIAL cycles before dropping
@@ -108,15 +110,11 @@ static void prvProcessNotification(TickType_t xTicksToDelay)
         case CVOLT_CMD_GET_VOLTAGE:
             printf("%d\n", curVolt);
             break;
-        case CVOLT_CMD_FROM_VOLTAGE:
-            initialVolt = CVOLT_CMD_DECODE_VOLTAGE(ulMessage);
+        case CVOLT_CMD_LINSTEP_VOLTAGE:
+            initialVolt = CVOLT_CMD_DECODE_FROM(ulMessage);
+            finalVolt = CVOLT_CMD_DECODE_TO(ulMessage);
+            stepVolt = CVOLT_CMD_DECODE_STEP(ulMessage);
             curVolt = initialVolt;
-            break;
-        case CVOLT_CMD_TO_VOLTAGE:
-            finalVolt = CVOLT_CMD_DECODE_VOLTAGE(ulMessage);
-            break;
-        case CVOLT_CMD_STEP_VOLTAGE:
-            stepVolt = CVOLT_CMD_DECODE_VOLTAGE(ulMessage);
             break;
         case CVOLT_CMD_NEXT:
             pwm_set_chan_level(GPIO_TO_PWM_SLICE(CVOLT_PWM_OUT_PIN),

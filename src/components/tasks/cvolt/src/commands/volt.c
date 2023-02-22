@@ -34,6 +34,7 @@
 
 #include "console/console.h"
 #include "cvolt/commands.h"
+#include "cvolt/utils.h"
 #include "cvolt/task.h"
 
 /* ************************************************************************* */
@@ -62,7 +63,7 @@ void *cvolt_argtable[] = {
 void vCVoltCommandBuild(size_t n, void **argtable)
 {
     argtable[0] = arg_lit0("h", "help", "print this help and exit");
-    argtable[1] = arg_int0("s", "set", "<value>", "value = [0...65535]]");
+    argtable[1] = arg_int0("s", "set", "<value>", "value = [0...127]");
     argtable[2] = arg_end(1);
     assert(arg_nullcheck(argtable) == 0);
     struct arg_int *volt = argtable[1];
@@ -72,7 +73,6 @@ void vCVoltCommandBuild(size_t n, void **argtable)
 
 int iCVoltCommandRun(int argc, char **argv)
 {
-    int exitcode = 0;
     uint32_t opcode = 0;
     uint32_t payload = 0;
     uint32_t message;
@@ -81,9 +81,10 @@ int iCVoltCommandRun(int argc, char **argv)
 
     if (volt->count > 0)
     {
+        uint v = clip(volt->ival[0], 0, 127);
         // finally execute the command, once we know that ist arguments have been parsed
         opcode = CVOLT_CMD_SET_VOLTAGE;
-        payload |= CVOLT_CMD_ENCODE_VOLTAGE(volt->ival[0]);
+        payload |= CVOLT_CMD_ENCODE_VOLTAGE(v);
     }
     else
     {
@@ -94,5 +95,5 @@ int iCVoltCommandRun(int argc, char **argv)
     {
         xTaskNotify(xCVoltTask, message, eSetValueWithOverwrite);
     }
-    return exitcode;
+    return 0;
 }

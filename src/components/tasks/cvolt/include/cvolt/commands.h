@@ -37,16 +37,21 @@ extern "C"
 #define CVOLT_CMD_SET_VOLTAGE (0x01 << 24)
 #define CVOLT_CMD_GET_VOLTAGE (0x02 << 24)
 
-#define CVOLT_CMD_FROM_VOLTAGE (0x03 << 24)
-#define CVOLT_CMD_TO_VOLTAGE (0x04 << 24)
-#define CVOLT_CMD_STEP_VOLTAGE (0x05 << 24)
-
+#define CVOLT_CMD_LINSTEP_VOLTAGE (0x03 << 24)
 #define CVOLT_CMD_NEXT (0x06 << 24)
 
 /* SET VOLTAGE PARAMETERS */
-// Voltage in 0...65535 steps
-#define CVOLT_CMD_ENCODE_VOLTAGE(value) ((value) & 0x0000FFFF)
-#define CVOLT_CMD_DECODE_VOLTAGE(value) ((value) & 0x0000FFFF)
+// Voltage in 0...127 steps
+#define CVOLT_CMD_ENCODE_VOLTAGE(value) ((value) & 0x0000007F)
+#define CVOLT_CMD_DECODE_VOLTAGE(value) ((value) & 0x000007F)
+
+#define CVOLT_CMD_ENCODE_FROM(from) (((from) << 16) & 0x007F0000)
+#define CVOLT_CMD_ENCODE_TO(to) (((to) << 8) & 0x00007F00)
+#define CVOLT_CMD_ENCODE_STEP(step) ((step) & 0x0000007F)
+
+#define CVOLT_CMD_DECODE_FROM(value)  (((value) & 0x007F0000) >> 16)
+#define CVOLT_CMD_DECODE_TO(value) (((value) & 0x00007F00) >> 8)
+#define CVOLT_CMD_DECODE_STEP(value) (((value) & 0x0000007F))
 
     /* ************************************************************************* */
     /*                               API FUNCTIONS                               */
