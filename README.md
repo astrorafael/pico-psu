@@ -27,7 +27,7 @@ This constant voltage translates into a $I_e$ emitter constant current flowing f
 ![Figure 1](doc/img/current_vs_count.png)
 ![Figure 2](doc/img/Vce_vs_count.png)
 
-Figures 1 & 2 shows the experimental measurements using Pico's `VSYS` output as $V_CC = 4.94V$. It shows that the current flowing through the LED is proportional to the ON part of the square waveform until it reaches the saturation regime of transistor U3 at the ON counter value of 114. At this point, U3 $V_CE$ voltage remains constant at a saturation value of 139 mV. Changing the R2 resistor value to a slightly bigger value (1k2) probably will make the whole range linear.
+Figures 1 & 2 shows the experimental measurements using Pico's `VSYS` output as $V_{CC} = 4.94V$. It shows that the current flowing through the LED is proportional to the ON part of the square waveform until it reaches the saturation regime of transistor U3 at the ON counter value of 114. At this point, U3 $V_ {CE}$ voltage remains constant at a saturation value of 139 mV. Changing the R2 resistor value to a slightly bigger value (1k2) probably will make the whole range linear.
 
 ![Figure 3](doc/img/protoboard_pico-psu.jpg) 
 Figure 3 shows the prototyped circuit in a protoboard. All op-amps are from the same LM324N chip, which accepts single supply rail lines. This is very convenient since we are dealing with unipolar signals (no negative voltages).
